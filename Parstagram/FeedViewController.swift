@@ -13,8 +13,9 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
 
-
     @IBOutlet weak var tableView: UITableView!
+    
+    
     
     var posts = [PFObject]()
     
