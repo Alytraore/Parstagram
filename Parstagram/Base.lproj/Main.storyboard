@@ -150,7 +150,9 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="CaptionLabel" destination="YnY-Ca-IlT" id="1vv-0a-GxW"/>
                                             <outlet property="photoView" destination="fnz-Tl-cD0" id="PwJ-bp-lr8"/>
+                                            <outlet property="usernameLabel" destination="HUP-hn-Du7" id="8mc-6W-4On"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
