@@ -17,14 +17,14 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var tableView: UITableView!
     
     
-    //let commentBar = MessageInputBar()
-    //var showsCommentBar = false
+    let commentBar = MessageInputBar()
+    var showsCommentBar = false
     
     var posts = [PFObject] ()
     
-    //var numberofPosts: Int!
-    //var selectedPost: PFObject!
-   // let myrefreshControl = UIRefreshControl()
+    var numberofPosts: Int!
+    var selectedPost: PFObject!
+    let myrefreshControl = UIRefreshControl()
 
     
     
