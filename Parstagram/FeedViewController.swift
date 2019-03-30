@@ -17,15 +17,15 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     @IBOutlet weak var tableView: UITableView!
     
-    
-    let commentBar = MessageInputBar()
-    var showsCommentBar = false
-    
     var posts: [PFObject] = []
+    let myrefreshControl = UIRefreshControl()
+    
+    var commentBar = MessageInputBar()
+    var showsCommentBar = false
     
     var numberofPosts: Int!
     var selectedPost: PFObject!
-    let myrefreshControl = UIRefreshControl()
+
 
     
     
@@ -64,18 +64,21 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewDidAppear(animated)
         
         let query = PFQuery(className:"Posts")
-        query.includeKeys(["author", "comments", "comments.author`"])
+        query.includeKeys(["author", "comments", "comments.author"])
         query.limit = 20
         
         query.findObjectsInBackground { (posts, error)in
             if posts != nil {
                 self.posts = posts!
                 self.tableView.reloadData()
+            } else {
+                print("Posts not found!")
             }
         }
         
         
     }
+    
     func messageInputBar(_ inputBar: MessageInputBar, didPressSendButtonWith text: String) {
         // Create a comment
         let comment = PFObject(className: "Comments")
@@ -107,7 +110,6 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         let post = posts[section]
         let comments = (post["comments"] as? [PFObject]) ?? []
         return comments.count + 2
-        
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -118,24 +120,26 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         let post = posts[indexPath.section]
         let comments = (post["comments"] as? [PFObject]) ?? []
+        
+        
         if indexPath.row == 0 {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell") as! PostCell
-        
-        
-        
-        
-        let user = post["author"] as!PFUser
-        cell.usernameLabel.text = user.username
-        
-        cell.captionLabel.text = post["caption"] as? String
-        let imageFile = post["image"] as! PFFileObject
-        let urlString = imageFile.url!
-        let url = URL(string: urlString)!
-        
-        cell.photoView.af_setImage(withURL: url)
+            let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell") as! PostCell
+            
+            
+            
+            
+            let user = post["author"] as! PFUser
+            cell.usernameLabel.text = user.username
+            
+            cell.captionLabel.text = post["caption"] as? String
+            let imageFile = post["image"] as! PFFileObject
+            let urlString = imageFile.url!
+            let url = URL(string: urlString)!
+            
+            cell.photoView.af_setImage(withURL: url)
 
-        return cell
+            return cell
         } else if indexPath.row <= comments.count {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CommentCell") as! CommentCell
             
@@ -147,7 +151,7 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
             return cell
             
         } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "CommentCell")!
+            let cell = tableView.dequeueReusableCell(withIdentifier: "AddCommentCell")!
             return cell
         }
     }
